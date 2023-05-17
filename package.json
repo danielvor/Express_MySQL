@@ -4,9 +4,8 @@
   "description": "Programa para gestão financeira",
   "main": "server.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "author": "Daniel Rodrigues",
   "license": "ISC",
