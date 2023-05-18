@@ -1,5 +1,12 @@
-const Renda = require('../models/renda_models');
-const renda = require('express').Router();
+const express = require('express');
+const path = require('path');
+const Renda = require('../models/rendaModels');
+
+const renda = express.Router();
+
+renda.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/dashboard.html'));
+  });
 
 renda.get('/renda/', (req, res) => {
     Renda.findAll().then((rendas) => {

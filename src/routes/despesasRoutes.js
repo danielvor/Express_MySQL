@@ -1,4 +1,4 @@
-const Despesas = require('../models/despesas_models');
+const Despesas = require('../models/despesasModels');
 const despesas = require('express').Router();
 
 despesas.get('/despesas/', (req, res) => {
