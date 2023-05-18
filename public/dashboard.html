@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <div class="renda">
+      <h1>Rendas</h1>
+
+      <h2>Cadastrar Renda</h2>
+      <form id="cadastroForm">
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" name="descricao" /><br />
+
+        <label for="valor">Valor:</label>
+        <input type="text" id="valor" name="valor" /><br />
+
+        <button type="button" onclick="cadastrarRenda()">Cadastrar</button>
+      </form>
+
+      <h2>Listar Rendas</h2>
+      <ul id="rendasList"></ul>
+    </div>
+
+    <div class="despesas">
+      <h1>Despesas</h1>
+
+      <h2>Cadastrar Despesa</h2>
+      <form id="cadastroDespesaForm">
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricaoDespesa" name="descricao" /><br />
+
+        <label for="valor">Valor:</label>
+        <input type="text" id="valorDespesa" name="valor" /><br />
+
+        <button type="button" onclick="cadastrarDespesa()">Cadastrar</button>
+      </form>
+
+      <h2>Listar Despesas</h2>
+      <ul id="despesasList"></ul>
+    </div>
+  </body>
+</html>
+<script>
+  // Função para buscar as rendas e exibi-las na tela
+  function getRendas() {
+    fetch("/renda")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        var rendasList = document.getElementById("rendasList");
+        rendasList.innerHTML = "";
+
+        data.forEach(function (renda) {
+          var rendaItem = document.createElement("li");
+          rendaItem.textContent =
+            "Descrição: " + renda.descricao + ", Valor: " + renda.valor;
+
+          var deleteButton = document.createElement("button");
+          deleteButton.textContent = "Excluir";
+          deleteButton.onclick = function () {
+            excluirRenda(renda.id);
+          };
+
+          rendaItem.appendChild(deleteButton);
+          rendasList.appendChild(rendaItem);
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Função para cadastrar uma renda
+  function cadastrarRenda() {
+    var descricao = document.getElementById("descricao").value;
+    var valor = document.getElementById("valor").value;
+    var renda = { descricao: descricao, valor: valor };
+
+    fetch("/renda", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(renda),
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data.message);
+        getRendas(); // Atualiza a lista de rendas após o cadastro
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Função para excluir uma renda
+  function excluirRenda(id) {
+    fetch("/renda/" + id, {
+      method: "DELETE",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data.message);
+        getRendas(); // Atualiza a lista de rendas após a exclusão
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Chama a função para buscar as rendas quando a página é carregada
+  getRendas();
+</script>
+<script>
+  // Função para buscar as despesas e exibi-las na tela
+  function getDespesas() {
+    fetch("/despesas")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        var despesasList = document.getElementById("despesasList");
+        despesasList.innerHTML = "";
+
+        data.forEach(function (despesa) {
+          var despesaItem = document.createElement("li");
+          despesaItem.textContent =
+            "Descrição: " + despesa.descricao + ", Valor: " + despesa.valor;
+
+          var deleteButton = document.createElement("button");
+          deleteButton.textContent = "Excluir";
+          deleteButton.onclick = function () {
+            excluirDespesa(despesa.id);
+          };
+
+          despesaItem.appendChild(deleteButton);
+          despesasList.appendChild(despesaItem);
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Função para cadastrar uma despesa
+  function cadastrarDespesa() {
+    var descricao = document.getElementById("descricaoDespesa").value;
+    var valor = document.getElementById("valorDespesa").value;
+    var despesa = { descricao: descricao, valor: valor };
+
+    fetch("/despesas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(despesa),
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data.message);
+        getDespesas(); // Atualiza a lista de despesas após o cadastro
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Função para excluir uma despesa
+  function excluirDespesa(id) {
+    fetch("/despesas/" + id, {
+      method: "DELETE",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data.message);
+        getDespesas(); // Atualiza a lista de despesas após a exclusão
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  // Chama a função para buscar as despesas quando a página é carregada
+  getDespesas();
+</script>
